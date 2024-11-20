@@ -1,0 +1,103 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unistay - Find Your Perfect Hostel</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">Unistay</a>
+        <div class="nav-links">
+            
+            <a href="#">Hostels</a>
+            <a href="{% url 'about' %}">About Us</a>
+            <a href="{% url 'contact' %}">Contact Us</a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'home' %}" class="cta-button">Home</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="cta-button">Login</a>
+            <a href="{% url 'register' %}" class="cta-button">Sign Up</a>
+        {% endif %}
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="main-header">
+        <div class="header-content">
+            <h1>Welcome to Unistay!</h1>
+            <p>Find your ideal off-campus hostel near Maseno University.</p>
+            <a href="{% url 'booking' %}" class="cta-button">Book Now</a>
+        </div>
+        
+    </header>
+    
+    
+    
+
+    <!-- Hostels Showcase -->
+    <section class="hostels">
+        <h2>Available Hostels</h2>
+        <div class="hostel-list">
+            {% for hostel in hostels %}
+                <div class="hostel-card">
+                    <img src="{{ hostel.main_image.url }}" alt="{{ hostel.name }}">
+                    <h3>{{ hostel.name }} hostel</h3>
+                    <p>Location:{{ hostel.location }}</p>
+                    <p>Starting from KES {{ hostel.price_per_month }}</p>
+                    <a href="#" class="details-button">View Details</a>
+                </div>
+            {% empty %}
+                <p>No hostels available at the moment. Please check back later.</p>
+            {% endfor %}
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>About Us</h3>
+                <p>Your one-stop hostel booking platform providing quality accommodation for students and visitors.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Hostels</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <p>Email: support@unistay.com</p>
+                <p>Phone: +254 123 456 789</p>
+            </div>
+            <div class="footer-column">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/daveey.debaraka.3?mibextid=LQQJ4d"><img src="static/image/Facebook.webp" alt="Facebook"></a>
+                    <a href="https://x.com/am_nyongesa"><img src="/static/image/twitter.jpeg" alt="Twitter"></a>
+                    <a href="https://www.instagram.com/little_nyongesa"><img src="static/image/instagram.png" alt="Instagram"></a>
+                    <a href="https://www.linkedin.com/in/pappi-chulo-947552270?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"><img src="/static/image/linkedin.jpeg" alt="LinkedIn"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Unistay. All rights reserved.</p>
+        </div>
+    </footer>
+    
+
+</body>
+</html>
