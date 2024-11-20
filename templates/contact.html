@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Unistay</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<style>
+    .contact-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #333;
+}
+
+.contact-header {
+    text-align: center;
+    padding: 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.contact-info {
+    text-align: center;
+    margin: 30px 0;
+    font-size: 1.1em;
+}
+
+.contact-form-container {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.contact-form-container form label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.contact-form-container form input,
+.contact-form-container form select,
+.contact-form-container form textarea {
+    width: 96%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+}
+
+.contact-form-container form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.cta-buttoncontact {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    text-align: center;
+    
+    
+}
+
+.cta-buttoncontact:hover {
+    background-color: #0056b3;
+}
+
+.message-container {
+    max-width: 900px;
+    margin: 0 auto 20px;
+    padding: 10px;
+    text-align: center;
+}
+
+.message.success {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+
+</style>
+</head>
+<body>
+    {% if messages %}
+    <div class="message-container">
+        {% for message in messages %}
+            <p class="message {{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="contact-page">
+    <!-- Header section -->
+    <header class="contact-header">
+        <h1>Contact Us</h1>
+        <p>We’d love to hear from you! Feel free to reach out for any comments, complaints, suggestions, or reviews.</p>
+    </header>
+
+    <!-- Contact information section -->
+    <section class="contact-info">
+        <p><strong>Email:</strong> support@unistay.com</p>
+        <p><strong>Phone:</strong> +254 700 123 456</p>
+        <p><strong>Address:</strong> Unistay Offices, Maseno, Kenya</p>
+    </section>
+
+    <!-- Contact form section -->
+    <div class="contact-form-container">
+        <h2>Send Us a Message</h2>
+        <form method="post" action="{% url 'contact' %}">
+            {% csrf_token %}
+
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Your full name" required>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Your email address" required>
+
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject" required>
+                <option value="" disabled selected>Select Subject</option>
+                <option value="Comment">Comment</option>
+                <option value="Complaint">Complaint</option>
+                <option value="Suggestion">Suggestion</option>
+                <option value="Review">Review</option>
+            </select>
+
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Write your message here" required></textarea>
+
+            <button type="submit" class="cta-buttoncontact">Submit</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

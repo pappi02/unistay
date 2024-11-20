@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Unistay</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<style>
+    /* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1, h2 {
+    color: #007bff;
+}
+
+.about-page {
+    text-align: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.intro-section, .mission-section, .team-section, .cta-section {
+    margin: 40px auto;
+    max-width: 1000px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.intro-section h1, .mission-section h2, .team-section h2, .cta-section h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.intro-section p, .mission-section p, .cta-section p {
+    font-size: 1.1em;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Team Section Styling */
+.team-section .team-members {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.team-member {
+    width: 200px;
+    margin: 20px;
+    text-align: center;
+}
+
+.team-member img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    border: 2px solid #252525;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.team-member h3 {
+    font-size: 1.2em;
+    margin: 10px 0 5px;
+    color: #007bff;
+}
+
+.team-member p {
+    font-size: 0.9em;
+    color: #777;
+}
+
+/* Call-to-Action Button */
+.cta-button {
+    display: inline-block;
+    padding: 12px 24px;
+    color: #ffffff;
+    background-color: #007bff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .team-member {
+        width: 100%;
+    }
+
+    .cta-button {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="about-page">
+
+    <!-- Intro Section -->
+    <section class="intro-section">
+        <h1>About Unistay</h1>
+        <p>We are committed to providing safe, convenient, and comfortable off-campus housing options tailored for students.</p>
+    </section>
+
+    <!-- Mission Statement Section -->
+    <section class="mission-section">
+        <h2>Our Mission</h2>
+        <p>At Unistay, we aim to create a community where students feel at home, supported, and inspired to thrive in their academic journeys.</p>
+    </section>
+
+    <!-- Team Showcase Section -->
+    <section class="team-section">
+        <h2>Meet the Team</h2>
+        <div class="team-members">
+            <div class="team-member">
+                <img src="{% static 'image/ceo.jpeg' %}" alt="Team Member 1">
+                <h3>Baraka David</h3>
+                <p>Founder & CEO</p>
+            </div>
+            <div class="team-member">
+                <img src="{% static 'images/team2.jpg' %}" alt="Team Member 2">
+                <h3>Chris Lee</h3>
+                <p>Chief Marketing Officer</p>
+            </div>
+            <div class="team-member">
+                <img src="{% static 'images/team3.jpg' %}" alt="Team Member 3">
+                <h3>Jordan Smith</h3>
+                <p>Product Manager</p>
+            </div>
+            <!-- Add more team members as needed -->
+        </div>
+    </section>
+
+    <!-- Call-to-Action Section -->
+    <section class="cta-section">
+        <h2>Join Our Community</h2>
+        <p>Looking for a safe and friendly place to stay? Unistay is here to help you find the perfect home during your academic journey.</p>
+        <a href="#" class="cta-button">Find Your Hostel</a>
+    </section>
+
+</div>
+
+</body>
+</html>
