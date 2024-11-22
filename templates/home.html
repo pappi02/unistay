@@ -28,7 +28,7 @@
         <div class="header-content">
             <h1>Welcome to Unistay!</h1>
             <p>Find your ideal off-campus hostel near Maseno University.</p>
-            <a href="{% url 'booking' %}" class="cta-button">Book Now</a>
+            <a href="#" class="cta-button">Book Now</a>
         </div>
         
     </header>
@@ -45,8 +45,8 @@
                     <img src="{{ hostel.main_image.url }}" alt="{{ hostel.name }}">
                     <h3>{{ hostel.name }} hostel</h3>
                     <p>Location:{{ hostel.location }}</p>
-                    <p>Starting from KES {{ hostel.price_per_month }}</p>
-                    <a href="#" class="details-button">View Details</a>
+                    <a href="{% url 'hostel_details' hostel.id %}" class="details-button">View Details</a>
+
                 </div>
             {% empty %}
                 <p>No hostels available at the moment. Please check back later.</p>
@@ -64,7 +64,7 @@
             <div class="footer-column">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="#">Hostels</a></li>
                     <li><a href="{% url 'about' %}">About</a></li>
                     <li><a href="{% url 'contact' %}">Contact</a></li>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Amenity, Hostel, PaymentMethod, Booking, RoomType, StudentProfile, Transaction
+from .models import Amenity, Hostel, PaymentMethod, Booking, RoomImage, RoomType, StudentProfile, Transaction
 
 admin.site.register(Hostel)
 admin.site.register(Booking)
@@ -7,6 +7,7 @@ admin.site.register(StudentProfile)
 admin.site.register(PaymentMethod)
 admin.site.register(Amenity)
 admin.site.register(RoomType)
+admin.site.register(RoomImage)
 
 # Optional: Custom admin class to control display and features
 @admin.register(Transaction)
