@@ -279,12 +279,52 @@ textarea {
     background-color: #0056b3; /* Darker shade on hover */
 }
 
+/* Payment Details Section */
+.notice {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.card {
+    border: 1px solid #eaeaea;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.transaction-input {
+    margin-top: 15px;
+}
+
+.transaction-input label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.transaction-input textarea {
+    width: 100%;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    resize: none;
+}
 
 </style>
 </head>
 <body>
-
     <div class="booking-page">
+        {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+        {% endif %}
+
         <!-- Header section -->
         <header class="booking-header">
             <h1>Book Your Hostel Room</h1>
@@ -292,9 +332,9 @@ textarea {
         </header>
     
         <div class="booking-form-container">
-            <form method="post" action="{% url 'booking' %}">
+            <form method="post" action="{% url 'booking' hostel.id %}">
                 {% csrf_token %}
-    
+                
                 <!-- Personal Information -->
                 <div class="form-section">
                     <h2>Personal Information</h2>
@@ -320,6 +360,39 @@ textarea {
                     {{ form.room_type }}
                     {{ form.room_number }}
                 </div>
+                
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Payment Information</h5>
+                        <p class="text-danger">
+                            To book a hostel, use the payment details below to make payment and paste the transaction message/code in the input area below.
+                        </p>
+                        <ul>
+                            {% for method in hostel.payment_methods.all %}
+                                <li><strong>Type:</strong> {{ method.get_payment_type_display }}</li>
+                                {% if method.payment_type == 'send_money' and method.send_money %}
+                                    <li><strong>Phone Number:</strong> {{ method.send_money }}</li>
+                                {% endif %}
+                                {% if method.payment_type == 'buy_goods' and method.till_number %}
+                                    <li><strong>Till Number:</strong> {{ method.till_number }}</li>
+                                {% endif %}
+                                {% if method.payment_type == 'paybill' and method.paybill_number %}
+                                    <li><strong>Paybill Number:</strong> {{ method.paybill_number }}</li>
+                                    {% if method.account_number %}
+                                        <li><strong>Account Number:</strong> {{ method.account_number }}</li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Input for transaction message/code -->
+                <div class="form-section mt-4">
+                    <h2>Transaction Code/Message</h2>
+                    <textarea name="transaction_message" placeholder="Paste your transaction code or message here"></textarea>
+                </div>
+                
     
                 <!-- Terms and Conditions -->
                 <div class="form-section">
@@ -339,16 +412,12 @@ textarea {
                 </div>
     
                 <!-- Submit button to make payment -->
-                <button type="submit" class="cta-button">Make Payment</button>
+                <button type="submit" class="cta-button">submit</button>
+                             
             </form>
         </div>
     </div>
     
     
-    
-    
-
 </body>
-
 </html>
-

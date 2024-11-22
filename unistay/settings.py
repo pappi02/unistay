@@ -121,21 +121,18 @@ USE_TZ = True
 
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 # settings.py
 
 # URL to use when referring to static files
 STATIC_URL = '/static/'
 
-# Directories to look for static files during development
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',  # Adjust based on your project structure
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Directory to collect static files for production
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

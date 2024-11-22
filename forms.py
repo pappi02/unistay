@@ -46,9 +46,12 @@ class BookingForm(forms.Form):
     )
 
     # Room Details
-    hostel_name = forms.ChoiceField(choices=[], required=True)  # Dynamically populated in the view
+    hostel_name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={'readonly': 'readonly', 'placeholder': 'Hostel Name'})  # Read-only field
+    )
     room_type = forms.ChoiceField(
-        choices=[('Single', 'Single'), ('Double', 'Double')], 
+        choices=[('Single', 'Single'), ('Double', 'Double'), ('Bedsitter', 'Bedsitter')], 
         required=True
     )
     room_number = forms.CharField(
@@ -60,16 +63,16 @@ class BookingForm(forms.Form):
     # Terms and Conditions
     terms_accepted = forms.BooleanField(
         required=True, 
-        widget=forms.CheckboxInput(attrs={'class': 'terms-checkbox,'})
+        widget=forms.CheckboxInput(attrs={'class': 'terms-checkbox'})
     )
 
     def __init__(self, *args, **kwargs):
+        hostel_name = kwargs.pop('hostel_name', None)  # Extract the pre-filled hostel name
         super().__init__(*args, **kwargs)  # Initialize parent class first
 
-        # Dynamically populate the hostel_name choices from the Hostel model
-        hostels = Hostel.objects.all()
-        hostel_choices = [(hostel.id, hostel.name) for hostel in hostels]
-        self.fields['hostel_name'].choices = hostel_choices
+        if hostel_name:
+            # Set the initial value for the hostel_name field
+            self.fields['hostel_name'].initial = hostel_name
 
     def clean_terms_accepted(self):
         """ Custom validation for terms acceptance """

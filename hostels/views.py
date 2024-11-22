@@ -27,47 +27,63 @@ def home_view(request):
     return render(request, 'home.html', {'hostels': hostels})  # Ensure you have a 'home.html' template
 
 
-
-
-
 @login_required
-def booking(request):
-    form = BookingForm(request.POST or None)  # Initialize form with POST or GET data
+def booking(request, hostel_id):
+    # Get the hostel instance
+    hostel = get_object_or_404(Hostel, id=hostel_id)
+    
+    # Initialize the form with pre-filled hostel name
+    form = BookingForm(request.POST or None, initial={'hostel_name': hostel.id})
+    
+    if request.method == "POST":
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+            try:
+                # Fetch the room type instance using the room_type field
+                room_type = get_object_or_404(RoomType, id=cleaned_data['room_type'])
 
-    if request.method == "POST" and form.is_valid():
-        # Retrieve form data
-        cleaned_data = form.cleaned_data
-        
-        try:
-            # Fetch the hostel instance using the hostel_name (ID)
-            hostel = get_object_or_404(Hostel, id=cleaned_data['hostel_name'])
+                # Fetch transaction message
+                transaction_message = request.POST.get('transaction_message', '')
 
-            # Save booking details to the database
-            booking = Booking(
-                full_name=cleaned_data['full_name'],
-                admission_number=cleaned_data['admission_number'],
-                phone_number=cleaned_data['phone_number'],
-                email=cleaned_data['email'],
-                semester=cleaned_data['semester'],
-                emergency_name=cleaned_data['emergency_name'],
-                emergency_phone=cleaned_data['emergency_phone'],
-                emergency_relationship=cleaned_data['emergency_relationship'],
-                hostel=hostel,
-                room_type=cleaned_data['room_type'],
-                room_number=cleaned_data['room_number'],
-            )
-            booking.save()
+                # Create a booking entry
+                booking = Booking(
+                    full_name=cleaned_data['full_name'],
+                    admission_number=cleaned_data['admission_number'],
+                    phone_number=cleaned_data['phone_number'],
+                    email=cleaned_data['email'],
+                    semester=cleaned_data['semester'],
+                    emergency_name=cleaned_data['emergency_name'],
+                    emergency_phone=cleaned_data['emergency_phone'],
+                    emergency_relationship=cleaned_data['emergency_relationship'],
+                    hostel=hostel,
+                    room_type=room_type,
+                    room_number=cleaned_data['room_number'],
+                    transaction_message=transaction_message,
+                    is_verified=False,
+                )
+                booking.save()
 
-            # Redirect to the payment method page after successful booking
-            return redirect('payment_method')  # Assuming 'payment_method' is the name of your payment page URL
+                # Add success message
+                messages.success(request, "Booking submitted successfully for verification!")
 
-        except Exception as e:
-            # Handle potential errors like missing hostel or saving issues
-            print(e)
-            form.add_error(None, "There was an error processing your booking. Please try again.")
+                # Redirect to the success page
+                return redirect('booking_success')  # Define this URL in your urls.py
 
-    # Render the booking form if the request method is GET or form is not valid
-    return render(request, 'booking.html', {'form': form})
+            except Exception as e:
+                print(f"Error: {e}")
+                form.add_error(None, "There was an error processing your booking. Please try again.")
+        else:
+            form.add_error(None, "Please correct the errors below.")
+
+    # Render the form with the pre-filled hostel name
+    return render(request, 'booking.html', {'form': form, 'hostel': hostel})
+
+
+
+
+def booking_success(request):
+    return render(request, 'booking_success.html')
+
 
 
 
@@ -210,22 +226,30 @@ def register(request):
 
 
 
-def payment_method(request, booking_id):
-    # Retrieve the booking instance using the booking_id
-    booking = get_object_or_404(Booking, id=booking_id)
+@login_required
+def payment_method(request, hostel_id, room_type_id, price):
+    # Fetch the hostel instance by ID
+    hostel = get_object_or_404(Hostel, id=hostel_id)
     
-    # Get the associated hostel for this booking
-    hostel = booking.hostel
-    room_type = booking.room_type
-    room_number = booking.room_number
+    # Fetch the room type instance by ID
+    room_type = get_object_or_404(RoomType, id=room_type_id)
+    
+    # Retrieve all payment methods associated with the hostel
+    payment_methods = hostel.payment_methods.all()
 
-    # Example price (replace with your logic to calculate or fetch the price)
-    price = 5000  # This should be calculated or fetched based on room type, semester, etc.
-
+    # Pass all relevant data to the template
     return render(request, 'payment_method.html', {
-        'booking': booking,
         'hostel': hostel,
         'room_type': room_type,
-        'room_number': room_number,
         'price': price,
+        'payment_methods': payment_methods,
     })
+
+
+
+def hostel_details(request, hostel_id):
+    # Get the hostel object by ID
+    hostel = get_object_or_404(Hostel, id=hostel_id)
+    
+    # Render the hostel details template
+    return render(request, 'hostel_details.html', {'hostel': hostel})
