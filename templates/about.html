@@ -135,12 +135,12 @@ h1, h2 {
                 <p>Founder & CEO</p>
             </div>
             <div class="team-member">
-                <img src="{% static 'images/team2.jpg' %}" alt="Team Member 2">
+                <img src="{% static 'image/team2.jpg' %}" alt="Team Member 2">
                 <h3>Chris Lee</h3>
                 <p>Chief Marketing Officer</p>
             </div>
             <div class="team-member">
-                <img src="{% static 'images/team3.jpg' %}" alt="Team Member 3">
+                <img src="{% static 'image/team3.jpg' %}" alt="Team Member 3">
                 <h3>Jordan Smith</h3>
                 <p>Product Manager</p>
             </div>
@@ -152,7 +152,7 @@ h1, h2 {
     <section class="cta-section">
         <h2>Join Our Community</h2>
         <p>Looking for a safe and friendly place to stay? Unistay is here to help you find the perfect home during your academic journey.</p>
-        <a href="#" class="cta-button">Find Your Hostel</a>
+        <a href="{% url 'hostels_list' %}" class="cta-button">Find Your Hostel</a>
     </section>
 
 </div>

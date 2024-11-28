@@ -62,7 +62,7 @@ body {
 
 /* Header Styling */
 .main-header {
-    background-image: url('static/image/home.jpg');
+    background-image: url('/home/munga/unistay/static/image/home.jpg');
     background-size: cover; /* Ensures the image covers the entire header */
     background-position: center;
     background-repeat: no-repeat;
@@ -109,7 +109,7 @@ body {
     background-color: #0056b3;
 }
 
-
+/* Hostel Section */
 .hostels {
     text-align: center;
     padding: 20px;
@@ -117,57 +117,56 @@ body {
 
 .hostel-list {
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping to next line */
-    justify-content: center; /* Center the cards */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
 }
 
 .hostel-card {
-    width: 18%; /* Fixed width for the card */
-    margin: 10px;
+    width: 300px;
     border: 2px solid #427eff;
     padding: 5px;
     border-radius: 8px;
-    overflow: hidden; /* Ensure no overflow */
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center items horizontally */
-    height: auto;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .hostel-card img {
-    width: 100%; /* Make the image take the full width of the container */
-    height: 150px; /* Set a fixed height for the image to maintain consistency */
-    object-fit: cover; /* Ensure the image covers the area without distortion */
-    border-radius: 8px; /* Optional: add border radius to image */
-    margin-bottom: 10px; /* Space between image and text */
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.hostel-card h3 {
+    font-size: 18px;
+    margin: 0;
+
+}
+
+.hostel-card p {
+    font-size: 14px;
+    color: #555;
+    margin: 2px;
+
 }
 
 .details-button {
     display: inline-block;
     padding: 5px 10px;
-    margin-top: 10px;
+    margin-top: 5px;
     color: #fff;
     background-color: #007bff;
     text-decoration: none;
     border-radius: 4px;
+    
 }
 
-
-
-/* Media Queries for Responsive Design */
-@media (max-width: 768px) {
-    .hostel-card {
-        width: 4cm; /* Adjust width for tablets and smaller devices */
-        height: 8cm;
-        font-size: smaller;
-        
-    }
-
-    .hostel-card img {
-        height: 5cm; /* Adjust height for tablets */
-    }
+.details-button:hover {
+    background-color: #0056b3;
 }
-
 
 
 
@@ -267,8 +266,69 @@ body {
 }
 
 
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-/*cintact page*/
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .main-header h1 {
+        font-size: 1.5em;
+    }
+
+    .hostel-list {
+        flex-direction: column;
+    }
+
+    .hostel-card {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 10px;
+    }
+
+    .hostel-card img {
+        height: 150px;
+    }
+
+    .contact-page {
+        padding: 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .navbar-brand {
+        font-size: 20px;
+    }
+
+    .main-header {
+        height: 200px;
+    }
+
+    .main-header h1 {
+        font-size: 1.2em;
+    }
+
+    .contact-page {
+        padding: 10px;
+    }
+
+    .footer {
+        font-size: 12px;
+    }
+}
+
+
+/*contact page*/
 
 .contact-page {
     max-width: 900px;
@@ -371,4 +431,4 @@ body {
 
 
 
-/* hostel details */
+

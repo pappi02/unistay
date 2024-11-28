@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unistay - Find Your Perfect Hostel</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 
 
 </head>
@@ -16,7 +16,7 @@
         <a href="/" class="navbar-brand">Unistay</a>
         <div class="nav-links">
             
-            <a href="#">Hostels</a>
+            <a href="{% url 'hostels_list' %}">Hostels</a>
             <a href="{% url 'about' %}">About Us</a>
             <a href="{% url 'contact' %}">Contact Us</a>
            
