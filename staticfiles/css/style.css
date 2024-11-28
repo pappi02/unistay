@@ -122,7 +122,7 @@ body {
 }
 
 .hostel-card {
-    width: 18%; /* Fixed width for the card */
+    max-width: 18%; /* Fixed width for the card */
     margin: 10px;
     border: 2px solid #427eff;
     padding: 5px;
@@ -136,10 +136,22 @@ body {
 
 .hostel-card img {
     width: 100%; /* Make the image take the full width of the container */
-    height: 150px; /* Set a fixed height for the image to maintain consistency */
+    max-height: 150px; /* Set a fixed height for the image to maintain consistency */
     object-fit: cover; /* Ensure the image covers the area without distortion */
-    border-radius: 8px; /* Optional: add border radius to image */
-    margin-bottom: 10px; /* Space between image and text */
+    border-radius: 2px; /* Optional: add border radius to image */
+    margin-bottom: 5px; /* Space between image and text */
+}
+
+/* Reduce vertical spacing */
+.hostel-card h3 {
+    margin: 5px 0; /* Reduce top and bottom spacing */
+    font-size: 18px; /* Optional: Adjust font size */
+}
+
+.hostel-card p {
+    margin: 5px 0; /* Reduce top and bottom spacing */
+    font-size: 14px; /* Optional: Adjust font size */
+    color: #555;
 }
 
 .details-button {
@@ -150,6 +162,7 @@ body {
     background-color: #007bff;
     text-decoration: none;
     border-radius: 4px;
+    
 }
 
 

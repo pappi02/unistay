@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-
-from forms import BookingForm
+from django.core.paginator import Paginator
+from .forms import BookingForm
 from .models import Booking, Hostel, RoomType, StudentProfile, Transaction
 from django.core.mail import send_mail
 from django.conf import settings
@@ -27,120 +27,83 @@ def home_view(request):
     return render(request, 'home.html', {'hostels': hostels})  # Ensure you have a 'home.html' template
 
 
+
+
+
 @login_required
-def booking(request, hostel_id):
-    # Get the hostel instance
-    hostel = get_object_or_404(Hostel, id=hostel_id)
-    
-    # Initialize the form with pre-filled hostel name
-    form = BookingForm(request.POST or None, initial={'hostel_name': hostel.id})
-    
-    if request.method == "POST":
-        if form.is_valid():
-            cleaned_data = form.cleaned_data
-            try:
-                # Fetch the room type instance using the room_type field
-                room_type = get_object_or_404(RoomType, id=cleaned_data['room_type'])
+def hostels_list(request):
+    query = request.GET.get('search', '')  # Search query
+    location = request.GET.get('location', '')  # Filter by location
+    amenities = request.GET.getlist('amenities')  # Filter by amenities
+    price_range = request.GET.get('price', '')  # Filter by price range
 
-                # Fetch transaction message
-                transaction_message = request.POST.get('transaction_message', '')
+    hostels = Hostel.objects.all()
 
-                # Create a booking entry
-                booking = Booking(
-                    full_name=cleaned_data['full_name'],
-                    admission_number=cleaned_data['admission_number'],
-                    phone_number=cleaned_data['phone_number'],
-                    email=cleaned_data['email'],
-                    semester=cleaned_data['semester'],
-                    emergency_name=cleaned_data['emergency_name'],
-                    emergency_phone=cleaned_data['emergency_phone'],
-                    emergency_relationship=cleaned_data['emergency_relationship'],
-                    hostel=hostel,
-                    room_type=room_type,
-                    room_number=cleaned_data['room_number'],
-                    transaction_message=transaction_message,
-                    is_verified=False,
-                )
-                booking.save()
+    if query:
+        hostels = hostels.filter(name__icontains=query)
+    if location:
+        hostels = hostels.filter(location__icontains=location)
+    if amenities:
+        hostels = hostels.filter(amenities__name__in=amenities).distinct()
+    if price_range:
+        hostels = hostels.filter(room_types__price_per_semester__lte=price_range)
 
-                # Add success message
-                messages.success(request, "Booking submitted successfully for verification!")
+    hostels = hostels.order_by('name')  # Order for pagination consistency
+    paginator = Paginator(hostels, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-                # Redirect to the success page
-                return redirect('booking_success')  # Define this URL in your urls.py
+    return render(request, 'hostels_list.html', {
+        'page_obj': page_obj,
+        'search_query': query,
+        'location_query': location,
+        'amenities_query': amenities,
+        'price_query': price_range,
+    })
 
-            except Exception as e:
-                print(f"Error: {e}")
-                form.add_error(None, "There was an error processing your booking. Please try again.")
-        else:
-            form.add_error(None, "Please correct the errors below.")
 
-    # Render the form with the pre-filled hostel name
-    return render(request, 'booking.html', {'form': form, 'hostel': hostel})
 
 
 
 
 def booking_success(request):
+    # Render the booking success page
     return render(request, 'booking_success.html')
 
-
-
-
-@login_required
-def confirm_booking(request):
-    if request.method == "POST":
-        # Extract the form data
-        hostel_name = request.POST.get('hostel_name')
-        room_type = request.POST.get('room_type')
-        transaction_message = request.POST.get('transaction_message')
-
-        # Ensure all necessary data is present
-        if not hostel_name or not room_type or not transaction_message:
-            return JsonResponse({'error': 'All fields are required.'}, status=400)
-
-        try:
-            # Use atomic transaction to ensure all steps succeed or fail together
-            with transaction.atomic():
-                # Retrieve the selected hostel and room
-                hostel = Hostel.objects.get(name=hostel_name)
-                room = RoomType.objects.get(hostel=hostel, room_type=room_type, is_available=True)
-
-                # Create a booking
-                booking = Booking.objects.create(
-                    student=request.user,
-                    room=room,
-                    is_active=True  # We assume booking is active immediately
-                )
-
-                # Create a transaction record with the provided transaction message and unverified status
-                Transaction.objects.create(
-                    booking=booking,
-                    transaction_message=transaction_message,
-                    is_verified=False,  # Assume not verified until manual or automated verification
-                )
-
-                # Mark the room as unavailable since it's booked
-                room.is_available = False
-                room.save()
-
-            return JsonResponse({'success': 'Booking confirmed and transaction recorded.'}, status=200)
-
-        except Hostel.DoesNotExist:
-            return JsonResponse({'error': 'Hostel not found.'}, status=404)
-        except RoomType.DoesNotExist:
-            return JsonResponse({'error': 'Room not available.'}, status=404)
-        except Exception as e:
-            # Catch any unforeseen errors
-            return JsonResponse({'error': f'An unexpected error occurred: {str(e)}'}, status=500)
-
-    # If request method is not POST
-    return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
 def about(request):
     return render(request, 'about.html')
 
 
+
+@login_required
+def create_booking(request, hostel_id):
+    # Fetch the hostel only once, regardless of request type (GET or POST)
+    hostel = get_object_or_404(Hostel, id=hostel_id)
+
+    if request.method == 'POST':
+        form = BookingForm(request.POST)
+        
+        if form.is_valid():
+            # Save the booking to the database
+            booking = form.save(commit=False)
+            booking.hostel = hostel  # Associate the booking with the correct hostel
+            booking.save()
+            
+            # Display success message
+            messages.success(request, 'Booking created successfully.')
+            return redirect('booking_success')  # Redirect to a success page (adjust URL name if needed)
+        else:
+            # If the form is invalid, show error messages
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        # For GET requests, initialize the form
+        form = BookingForm()
+
+    return render(request, 'create_booking.html', {
+        'form': form,
+        'hostel': hostel,  # Pass hostel context to the template
+    })
 
 
 def contact(request):
@@ -177,21 +140,33 @@ def contact(request):
 
 
 
+
 def login_view(request):
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
-        user = authenticate(request, username=email, password=password)
-
-        if user is not None:
-            login(request, user)
-            return redirect('home')  # Redirect to home after login
-        else:
-            messages.error(request, "Invalid email or password.")
-            return redirect('login')  # Redirect back to login on failure
+        
+        # Ensure the user is authenticated by email instead of username
+        try:
+            user = User.objects.get(email=email)  # Use email to retrieve the user
+            if user is not None:
+                # Authenticate the user manually by matching email and password
+                user = authenticate(request, username=user.username, password=password)
+                
+                if user is not None:
+                    login(request, user)
+                    return redirect('home')  # Redirect to home page after successful login
+                else:
+                    messages.error(request, "Invalid email or password.")
+                    return redirect('login')  # Redirect back to login on failure
+            else:
+                messages.error(request, "No user found with that email address.")
+                return redirect('login')
+        except User.DoesNotExist:
+            messages.error(request, "No user found with that email address.")
+            return redirect('login')
 
     return render(request, 'login.html')
-
 
 
 
