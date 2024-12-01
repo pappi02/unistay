@@ -11,87 +11,82 @@ body {
 
 
 
-/* Navbar Styles */
-.navbar {
-    display: flex; /* Use flexbox for layout */
-    justify-content: space-between; /* Space out brand and links */
-    align-items: center; /* Center items vertically */
-    background-color: #007bff; /* Primary color for the navbar */
-    padding: 15px 30px; /* Padding for the navbar */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-}
 
-.navbar-brand {
-    font-size: 24px; /* Larger font size for brand */
-    color: #fff; /* White text color */
-    text-decoration: none; /* Remove underline */
-    font-weight: bold; /* Bold font for emphasis */
-}
-
-.nav-links {
-    display: flex; /* Use flexbox for nav links */
-    gap: 20px; /* Space between links */
-}
-
-.nav-links a {
-    color: #fff; /* White text color for links */
-    text-decoration: none; /* Remove underline */
-    padding: 10px 15px; /* Padding around links */
-    border-radius: 4px; /* Rounded corners for links */
-    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
-}
-
-/* Hover Effect for Links */
-.nav-links a:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* Light background on hover */
-    color: #fff; /* Keep text white on hover */
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column; /* Stack items vertically on small screens */
-        align-items: flex-start; /* Align items to the start */
-    }
-
-    .nav-links {
-        flex-direction: column; /* Stack links vertically */
-        gap: 10px; /* Reduce gap for smaller screens */
-    }
-}
-
-/* Header Styling */
-.main-header {
-    background-image: url('/home/munga/unistay/static/image/home.jpg');
-    background-size: cover; /* Ensures the image covers the entire header */
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 10cm; /* Full viewport height */
+/* Background Wrapper Styling */
+.background-wrapper {
+    background: url("{% static 'image/home.jpg' %}") no-repeat center center/cover;
+    height: 100vh; /* Ensures it covers the full viewport */
     display: flex;
+    flex-direction: column;
+}
+
+/* Navbar Styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
+    padding: 1rem 2rem;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
     color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 1rem;
+}
+
+.navbar .cta-button {
+    background: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.navbar .cta-button:hover {
+    background: #45a049;
+}
+
+/* Header Section */
+.main-header {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    position: relative;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-.header-content {
-    max-width: 600px; /* Limits the width of the content */
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
-    border-radius: 10px;
+.main-header .header-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
 }
 
-/* Header Text Styling */
-.main-header h1 {
-    font-size: 2.5em;
-    margin: 0 0 10px;
+.main-header .header-content p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
 }
 
-.main-header p {
-    font-size: 1.2em;
-    margin: 0 0 20px;
+.main-header .header-content .cta-button {
+    background: #4CAF50;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
+
+.main-header .header-content .cta-button:hover {
+    background: #45a049;
+}
+
 
 /* "Book Now" Button Styling */
 .cta-button {
@@ -120,16 +115,17 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
+    box-shadow: 5px black;
 }
 
 .hostel-card {
     width: 300px;
-    border: 2px solid #427eff;
+    border: 0;
     padding: 5px;
     border-radius: 8px;
     text-align: center;
     background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px #111111;
 }
 
 .hostel-card img {
@@ -170,86 +166,58 @@ body {
 
 
 
-
-/* Footer Styling */
-.footer {
-    background-color: #1c1c1c;
-    color: #ffffff;
-    padding: 40px 0;
-    font-family: Arial, sans-serif;
+  /* Footer */
+  .footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 40px 20px;
+    text-align: center;
 }
 
-.footer-container {
+.footer .footer-container {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .footer-column {
-    flex: 1 1 250px;
-    margin: 20px;
-    min-width: 200px; /* Ensures columns have a minimum width for readability */
+    flex: 1;
+    min-width: 200px;
 }
 
 .footer-column h3 {
+    margin-bottom: 15px;
     font-size: 18px;
-    color: #e0e0e0;
-    margin-bottom: 10px;
+    color: #ff7636;
 }
 
-.footer-column p,
-.footer-column ul,
-.footer-column a {
-    color: #b3b3b3;
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-/* Style and align the links in a list format */
 .footer-column ul {
     list-style: none;
     padding: 0;
-    margin: 0; /* Ensure no extra spacing around the list */
 }
 
 .footer-column ul li {
-    margin-bottom: 8px;
+    margin: 5px 0;
 }
 
 .footer-column ul li a {
-    color: #b3b3b3;
     text-decoration: none;
-    display: inline-block;
+    color: #fff;
 }
 
 .footer-column ul li a:hover {
     color: #007bff;
-    text-decoration: underline;
-}
-
-/* Social Icons */
-.social-icons a {
-    display: inline-block;
-    margin-right: 10px;
-    width: 24px;
-    height: 24px;
-}
-
-.social-icons a img {
-    width: 100%;
-    height: auto;
-    filter: brightness(0) invert(1); /* Makes icons white */
 }
 
 .footer-bottom {
-    text-align: center;
-    padding: 20px 0;
-    background-color: #111111;
-    color: #777777;
-    font-size: 12px;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.social-icons a img {
+    width: 30px;
+    margin: 5px;
 }
 
 /* Responsive Footer */

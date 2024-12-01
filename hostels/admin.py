@@ -130,8 +130,18 @@ class BookingAdmin(admin.ModelAdmin):
 # Student Profile Admin
 @admin.register(StudentProfile)
 class StudentProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'contact_number')
-    search_fields = ('user__username', 'user__email', 'contact_number')
+    list_display = ('user', 'contact_number', 'is_verified', 'verification_code')
+    search_fields = ('user__username', 'verification_code')
+    list_filter = ('is_verified',)
+    ordering = ('user',)
+    
+    # Customize form layout in detail view
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'contact_number', 'verification_code', 'is_verified')
+        }),
+    )
+
 
 
 # Payment Method Admin

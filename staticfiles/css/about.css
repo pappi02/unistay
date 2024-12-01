@@ -1,0 +1,99 @@
+   /* General Styling */
+   body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1, h2 {
+    color: #007bff;
+}
+
+.about-page {
+    text-align: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.intro-section, .mission-section, .team-section, .cta-section {
+    margin: 40px auto;
+    max-width: 1000px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.intro-section h1, .mission-section h2, .team-section h2, .cta-section h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.intro-section p, .mission-section p, .cta-section p {
+    font-size: 1.1em;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Team Section Styling */
+.team-section .team-members {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.team-member {
+    width: 200px;
+    margin: 20px;
+    text-align: center;
+}
+
+.team-member img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    border: 2px solid #252525;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.team-member h3 {
+    font-size: 1.2em;
+    margin: 10px 0 5px;
+    color: #007bff;
+}
+
+.team-member p {
+    font-size: 0.9em;
+    color: #777;
+}
+
+/* Call-to-Action Button */
+.cta-button {
+    display: inline-block;
+    padding: 12px 24px;
+    color: #ffffff;
+    background-color: #007bff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .team-member {
+        width: 100%;
+    }
+
+    .cta-button {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+}

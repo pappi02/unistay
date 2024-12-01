@@ -16,6 +16,8 @@ urlpatterns = [
     path('booking_success/', views.booking_success, name='booking_success'),
     path('hostels/', views.hostels_list, name='hostels_list'),
     path('create_booking/<int:hostel_id>/', views.create_booking, name='create_booking'),
+    path('verification/', views.verification, name='verification'),
+   
     
 ]
 
