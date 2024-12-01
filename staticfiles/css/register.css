@@ -1,0 +1,109 @@
+/* General Reset */
+body, h1, p, form, input, button, a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #092057, #669ad2); /* Unistay theme */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    
+}
+
+/* Header Styling */
+.main-header1 {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent overlay */
+    padding: 2rem 1rem;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 2rem;
+    
+}
+
+.main-header1 h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.main-header1 p {
+    font-size: 1.2rem;
+}
+
+/* Form Container */
+.registration-form-container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align: left;
+    margin-bottom: 30px;
+    
+
+}
+
+/* Input Fields */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form select {
+    width: 95%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    margin-top: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    
+}
+
+form input:focus {
+    border-color: #4CAF50; /* Green for focus */
+    outline: none;
+}
+
+/* Submit Button */
+form button[type="submit"] {
+    background: #4CAF50; /* Green theme */
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 15px;
+}
+
+form button[type="submit"]:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+/* Login Link */
+.registration-form-container p {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.registration-form-container a {
+    color: #2A9DF4; /* Secondary theme color */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.registration-form-container a:hover {
+    text-decoration: underline;
+}

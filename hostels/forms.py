@@ -1,5 +1,7 @@
 from django import forms
 from hostels.models import Booking
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class BookingForm(forms.ModelForm):
@@ -31,3 +33,20 @@ class BookingForm(forms.ModelForm):
                 'placeholder': 'Enter transaction details here...',
             }),
         }
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    contact_number = forms.CharField(max_length=15, required=False)
+
+    class Meta:
+        model = User
+        fields = ['email', 'contact_number', 'password1', 'password2']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.username = user.email  # Set the username to email
+        if commit:
+            user.save()
+        return user
+
+    class VerificationCodeForm(forms.Form):
+         verification_code = forms.CharField(max_length=6, label="Verification Code")

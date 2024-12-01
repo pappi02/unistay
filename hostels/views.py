@@ -1,18 +1,30 @@
-from django.http import HttpResponse, JsonResponse
+
+import random
+import string
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from .forms import BookingForm
-from .models import Booking, Hostel, RoomType, StudentProfile, Transaction
+from .models import Hostel, RoomType, StudentProfile, generate_verification_code
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from django.db import transaction
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
+from django.utils.timezone import now
+from django.contrib.auth import get_user_model
+from .forms import CustomUserCreationForm
+from django.http import Http404
+from django.urls import reverse
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
+
+
+
 
 def index(request):
     # Fetch all hostels to display 
@@ -65,7 +77,7 @@ def hostels_list(request):
 
 
 
-
+@login_required
 def booking_success(request):
     # Render the booking success page
     return render(request, 'booking_success.html')
@@ -172,34 +184,193 @@ def login_view(request):
 
 
 
+
+def generate_verification_code():
+    """Generate a random 6-digit verification code."""
+    return ''.join(random.choices(string.digits, k=6))
+
+\
+
+def send_verification_email(user_email, verification_code, request):
+    """Send a styled verification email to the user."""
+    
+    # HTML content for the email
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+                color: #333;
+            }}
+            .email-container {{
+                max-width: 600px;
+                margin: 20px auto;
+                background: #ffffff;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }}
+            .email-header {{
+                background-color: #4CAF50;
+                color: white;
+                padding: 20px;
+                text-align: center;
+            }}
+            .email-header img {{
+                max-width: 100px;
+                margin-bottom: 10px;
+            }}
+            .email-body {{
+                padding: 30px;
+                text-align: center;
+            }}
+            .verification-code {{
+                display: inline-block;
+                background: #f8f8f8;
+                border: 2px dashed #4CAF50;
+                padding: 20px 40px;
+                font-size: 24px;
+                font-weight: bold;
+                color: #4CAF50;
+                margin: 20px 0;
+            }}
+            .email-footer {{
+                background-color: #f4f4f4;
+                color: #666;
+                padding: 10px 20px;
+                text-align: center;
+                font-size: 12px;
+            }}
+            a.button {{
+                display: inline-block;
+                background: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                text-decoration: none;
+                font-size: 16px;
+                margin-top: 20px;
+            }}
+            a.button:hover {{
+                background: #45a049;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <!-- Header Section -->
+            <div class="email-header">
+                <img src="http://127.0.0.1:8000/static/image/logo.png" alt="Site Logo">
+                <h1>Account Verification</h1>
+            </div>
+            <!-- Body Section -->
+            <div class="email-body">
+                <p>Hello,</p>
+                <p>Thank you for registering on our platform. To complete your registration, please verify your account using the code below:</p>
+                <div class="verification-code">{verification_code}</div>
+               
+            </div>
+            <!-- Footer Section -->
+            <div class="email-footer">
+                <p>If you did not request this, please ignore this email.</p>
+                <p>&copy; 2024 Unistay. All rights reserved.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+    # Fallback plain-text content
+    text_content = strip_tags(f"""
+    Verify Your Account
+    Your verification code is {verification_code}.
+    
+    """)
+
+    # Send the email
+    email = EmailMultiAlternatives(
+        subject="Account Verification",
+        body=text_content,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[user_email],
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
+
+
+
 def register(request):
     if request.method == "POST":
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        contact_number = request.POST.get('contact_number')
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()  # Save the user object before creating the profile
 
-        # Check if the user already exists
-        if User.objects.filter(username=email).exists():
-            messages.error(request, "A user with that email already exists.")
-            return redirect('register')
+            # Generate and save the verification code
+            verification_code = generate_verification_code()
+            profile = user.studentprofile  # Assuming you've set up the StudentProfile model
+            profile.verification_code = verification_code
+            profile.save()
 
-        # Create the user
-        user = User.objects.create_user(username=email, email=email, password=password)
+            # Send the verification email
+            send_verification_email(user.email, verification_code, request)
 
-        # Check if StudentProfile already exists for this user
-        if not hasattr(user, 'studentprofile'):
-            # Create a StudentProfile instance
-            StudentProfile.objects.create(user=user, contact_number=contact_number)
+            # Redirect to the verification page with the user_id in the URL
+            return redirect(f'/verification/?user_id={user.pk}')  # Include user_id in the URL
 
-        # Log the user in
-        login(request, user)
-        messages.success(request, "Registration successful! You are now logged in.")
-        return redirect('home')  # Redirect to the home page or any other page
+    else:
+        form = CustomUserCreationForm()
 
-    return render(request, 'register.html')
+    return render(request, 'register.html', {'form': form})
 
 
 
+def verification(request):
+    # Retrieve `user_id` or `code` from the query string
+    user_id = request.GET.get('user_id')
+    code = request.GET.get('code')
+
+    # Ensure at least one identifier is provided
+    if not user_id and not code:
+        raise Http404("User ID or verification code is required")
+
+    try:
+        # Find the user by `user_id` or `code`
+        if user_id:
+            user = User.objects.get(pk=user_id)
+        elif code:
+            user = User.objects.get(studentprofile__verification_code=code)
+
+        student_profile = user.studentprofile
+    except User.DoesNotExist:
+        messages.error(request, "Invalid user.")
+        return redirect('register')  # Redirect to the registration page
+    except StudentProfile.DoesNotExist:
+        messages.error(request, "Profile not found.")
+        return redirect('register')  # Redirect if no student profile is found
+
+    if request.method == "POST":
+        entered_code = request.POST.get('verification_code')
+
+        if entered_code == student_profile.verification_code:
+            # Mark the user as verified
+            student_profile.is_verified = True
+            student_profile.save()
+
+            # Log the user in
+            login(request, user)
+            messages.success(request, "Your account has been successfully verified!")
+            return redirect('home')  # Redirect to home page or desired location
+        else:
+            messages.error(request, "Invalid verification code. Please try again.")
+
+    # Pass `user_id` to the template for rendering
+    return render(request, 'verify_email.html', {'user_id': user.id})
 
 @login_required
 def payment_method(request, hostel_id, room_type_id, price):
@@ -228,3 +399,9 @@ def hostel_details(request, hostel_id):
     
     # Render the hostel details template
     return render(request, 'hostel_details.html', {'hostel': hostel})
+
+
+
+
+
+

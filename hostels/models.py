@@ -1,7 +1,11 @@
+import random
+import string
 from django.conf import settings
 from django.db import models
-
-
+from django.core.mail import send_mail
+from django.utils.html import format_html
+from django.template.loader import render_to_string
+from django.urls import reverse
 
 
 class Amenity(models.Model):
@@ -51,6 +55,7 @@ class Booking(models.Model):
         (DOUBLE, 'Double'),
         (BEDSITTER, 'Bedsitter'),
     ]
+
     # Personal Information
     full_name = models.CharField(max_length=50)
     admission_number = models.CharField(max_length=20)
@@ -64,35 +69,137 @@ class Booking(models.Model):
     emergency_relationship = models.CharField(max_length=20)
 
     # Room Details
-    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name="bookings")
+    hostel = models.ForeignKey('Hostel', on_delete=models.CASCADE, related_name="bookings")
     room_type = models.CharField(max_length=15, choices=ROOM_TYPE_CHOICES)
-    
 
     # Transaction Details
-    transaction_message = models.TextField(blank=False, null=False)
-    verified = models.BooleanField(default=False) 
-   
+    transaction_message = models.TextField(blank=True, null=True)
+
+    # Verification
+    verified = models.BooleanField(default=False)
+
     # Timestamps
-    created_at = models.DateTimeField(auto_now_add=True)  
-    updated_at = models.DateTimeField(auto_now=True)      
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        # Check if the `verified` field is being updated to True
+        if self.pk:  # Only for existing records
+            original = Booking.objects.get(pk=self.pk)
+            if not original.verified and self.verified:  # Only if verification status changes to True
+                # HTML Email Content
+                email_content = format_html(
+                    """
+                    <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+                        <div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 8px; overflow: hidden;">
+                            <div style="background-color: #4CAF50; color: #ffffff; padding: 15px 20px; text-align: center;">
+                                <img src="{logo_url}" alt="Unistay Logo" style="max-width: 150px;">
+                                <h2 style="margin: 0;">Booking Confirmation</h2>
+                            </div>
+                            <div style="padding: 20px;">
+                                <p style="font-size: 16px; color: #333;">
+                                    Dear <strong>{full_name}</strong>,
+                                </p>
+                                <p style="font-size: 14px; color: #555;">
+                                    We are thrilled to confirm your booking at <strong>{hostel_name}</strong>. Below are your booking details:
+                                </p>
+                                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                                    <tr>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd; color: #555;">Room Type:</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd; color: #333;">{room_type}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd; color: #555;">Transaction Details:</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd; color: #333;">{transaction_message}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd; color: #555;">Booking Date:</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd; color: #333;">{booking_date}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd; color: #555;">Booking Time:</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd; color: #333;">{booking_time}</td>
+                                    </tr>
+                                </table>
+                                <p style="font-size: 14px; color: #555; margin-top: 15px;">
+                                    Thank you for choosing Unistay. Enjoy exclusive discounts on future bookings with our referral program!
+                                </p>
+                                <p style="font-size: 14px; color: #555; margin-top: 15px;">
+                                    Best regards,<br>
+                                    <strong>Unistay Team</strong>
+                                </p>
+                            </div>
+                            <div style="background-color: #f9f9f9; padding: 10px 20px; text-align: center;">
+                                <p style="font-size: 12px; color: #999;">Follow us on:</p>
+                                <a href="https://facebook.com/unistay" style="margin: 0 10px; text-decoration: none;">
+                                    <img src="{facebook_icon_url}" alt="Facebook" style="width: 24px;">
+                                </a>
+                                <a href="https://twitter.com/unistay" style="margin: 0 10px; text-decoration: none;">
+                                    <img src="{twitter_icon_url}" alt="Twitter" style="width: 24px;">
+                                </a>
+                                <a href="https://instagram.com/unistay" style="margin: 0 10px; text-decoration: none;">
+                                    <img src="{instagram_icon_url}" alt="Instagram" style="width: 24px;">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    """,
+                    logo_url="https://yourwebsite.com/static/logo.png",
+                    facebook_icon_url="https://yourwebsite.com/static/icons/facebook.png",
+                    twitter_icon_url="https://yourwebsite.com/static/icons/twitter.png",
+                    instagram_icon_url="https://yourwebsite.com/static/icons/instagram.png",
+                    full_name=self.full_name,
+                    hostel_name=self.hostel.name,
+                    room_type=self.room_type,
+                    transaction_message=self.transaction_message,
+                    booking_date=self.created_at.strftime('%B %d, %Y'),
+                    booking_time=self.created_at.strftime('%I:%M %p'),
+                )
+
+                # Send Email
+                send_mail(
+                    subject="🎉 Booking Confirmation - Unistay",
+                    message="Your booking confirmation details.",  # Plain text fallback
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[self.email],
+                    html_message=email_content,  # HTML version of the email
+                    fail_silently=False,
+                )
+        # Save the changes
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.full_name} - {self.hostel.name}"
+
     class Meta:
         ordering = ['-created_at']  # Show recent bookings first
         verbose_name = "Booking"
         verbose_name_plural = "Bookings"
 
-
 # Optional: Student Profile model
+
+def generate_verification_code():
+    """Generates a random 6-digit verification code."""
+    return str(random.randint(100000, 999999))
+
 class StudentProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Use custom user model
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     contact_number = models.CharField(max_length=15, blank=True, null=True)
+    verification_code = models.CharField(max_length=6, blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.user.email  # Return email instead of username
-
-
+    def send_verification_email(self, request):
+        """Send the verification email with the verification code."""
+        verification_link = f"{request.scheme}://{request.get_host()}{reverse('verification')}?user_id={self.user.pk}&code={self.verification_code}"
+        subject = 'Account Verification'
+        
+        # Render the email content using the template
+        message = render_to_string('verification_email.html', {
+            'user': self.user,
+            'verification_link': verification_link,
+        })
+        
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email])
 # Payment Method model
 class PaymentMethod(models.Model):
     PAYMENT_CHOICES = [

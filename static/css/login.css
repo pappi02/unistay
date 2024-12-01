@@ -1,0 +1,88 @@
+ /* Reset some default browser styles */
+ body, h1, p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Light gray background */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-header h1 {
+    font-size: 2.5rem;
+    color: #333; /* Dark text */
+}
+
+.login-header p {
+    font-size: 1.2rem;
+    color: #777; /* Gray text */
+}
+
+.login-container {
+    background-color: #fff; /* White background for the form */
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 300px; /* Fixed width for the form */
+    text-align: left; /* Align text to the left */
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="email"], 
+input[type="password"] {
+    width: 100%; /* Full width inputs */
+    padding: 10px; /* Padding inside inputs */
+    margin-bottom: 15px; /* Spacing between inputs */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 4px; /* Slightly rounded corners */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+input[type="email"]:focus, 
+input[type="password"]:focus {
+    border-color: #007bff; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+.cta-button {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    padding: 10px 15px; /* Padding inside button */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 1rem; /* Font size */
+    width: 100%; /* Full width button */
+}
+
+.cta-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+p {
+    margin-top: 10px; /* Space above paragraph */
+}
+
+a {
+    color: #007bff; /* Blue link color */
+    text-decoration: none; /* No underline */
+}
+
+a:hover {
+    text-decoration: underline; /* Underline on hover */
+}

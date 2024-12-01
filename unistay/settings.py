@@ -150,4 +150,5 @@ EMAIL_HOST_PASSWORD = 'REMOVED'  # Use environment variables for security
 
 LOGIN_URL = '/login/'  # Set this to the path of your login view
 
-LOGIN_REDIRECT_URL = '/hostels_list/'
+LOGIN_REDIRECT_URL = '/home/'
+
