@@ -15,8 +15,8 @@ SECRET_KEY = env('DJANGO_SECRET_KEY', default='your_default_secret_key')
 # Debugging flag
 DEBUG = env.bool('DJANGO_DEBUG', default=True)
 
-# Allowed Hosts
-ALLOWED_HOSTS = ['https://unistay-16c5.onrender.com', 'www.your-domain.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['unistay-16c5.onrender.com', 'localhost', '127.0.0.1']
+
 
 # Application definition
 INSTALLED_APPS = [
