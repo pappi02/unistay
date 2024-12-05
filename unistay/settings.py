@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('DJANGO_SECRET_KEY', default='your_default_secret_key')
 
 # Debugging flag
-DEBUG = env.bool('DJANGO_DEBUG', default=False)
+DEBUG = env.bool('DJANGO_DEBUG', default=True)
 
 # Allowed Hosts
 ALLOWED_HOSTS = ['https://unistay-16c5.onrender.com', 'www.your-domain.com', 'localhost', '127.0.0.1']
