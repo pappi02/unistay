@@ -14,43 +14,91 @@ body {
 
 /* Background Wrapper Styling */
 .background-wrapper {
-    background: url("{% static 'image/home.jpg' %}") no-repeat center center/cover;
-    height: 100vh; /* Ensures it covers the full viewport */
+    background: url('/static/image/home.jpg') no-repeat center center/cover;
+    height: 50vh; /* Ensures it covers the full viewport */
     display: flex;
     flex-direction: column;
 }
-
 /* Navbar Styling */
+/* Navbar styles */
 .navbar {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: space-between; /* Logo on one side, links on the other */
+    align-items: center; /* Vertically align items */
     padding: 1rem 2rem;
-    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     color: #fff;
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
-.navbar a {
-    color: #fff;
-    text-decoration: none;
-    margin-left: 1rem;
+/* Logo styles */
+.navbar-brand {
+    flex: 1; /* Occupies one column */
 }
 
+.navbar-brand .logo {
+    height: 200px; /* Increased logo size */
+    width: auto; /* Maintain aspect ratio */
+    transition: transform 0.3s; /* Add smooth scaling on hover */
+}
+
+.navbar-brand .logo:hover {
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+/* Navigation links */
+.nav-links {
+    flex: 2; /* Occupies the second column */
+    display: flex;
+    justify-content: flex-end; /* Align links to the right */
+    gap: 1.5rem; /* Spacing between links */
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem; /* Slightly larger font size */
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #52c3f0; /* Change color on hover */
+}
+
+/* Call-to-action button */
 .navbar .cta-button {
-    background: #4CAF50;
+    background: #1656d7;
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.2rem;
     border-radius: 5px;
     text-decoration: none;
+    font-weight: 600;
     transition: background-color 0.3s;
 }
 
 .navbar .cta-button:hover {
-    background: #45a049;
+    background: #45a049; /* Green shade on hover */
 }
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column; /* Stack logo and links */
+        align-items: flex-start; /* Align items to the left */
+    }
+    .nav-links {
+        justify-content: flex-start; /* Align links to the left */
+        gap: 1rem; /* Reduce gap for smaller screens */
+    }
+    .navbar-brand .logo {
+        height: 100px; /* Slightly smaller logo for mobile */
+    }
+}
+
 
 /* Header Section */
 .main-header {
@@ -64,7 +112,7 @@ body {
 }
 
 .main-header .header-content h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: 1rem;
 }
 
@@ -73,23 +121,13 @@ body {
     margin-bottom: 1.5rem;
 }
 
-.main-header .header-content .cta-button {
-    background: #4CAF50;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
 
-.main-header .header-content .cta-button:hover {
-    background: #45a049;
-}
+
+
 
 
 /* "Book Now" Button Styling */
-.cta-button {
+.main-header .header-content .cta-button  {
     display: inline-block;
     padding: 12px 25px;
     font-size: 1em;
@@ -100,7 +138,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.cta-button:hover {
+.main-header .header-content .cta-button  {
     background-color: #0056b3;
 }
 
@@ -294,6 +332,8 @@ body {
         font-size: 12px;
     }
 }
+
+
 
 
 /*contact page*/

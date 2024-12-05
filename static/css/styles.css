@@ -14,12 +14,11 @@ body {
 
 /* Background Wrapper Styling */
 .background-wrapper {
-    background: url("{% static 'image/home.jpg' %}") no-repeat center center/cover;
+    background: url('/static/image/home.jpg') no-repeat center center/cover;
     height: 50vh; /* Ensures it covers the full viewport */
     display: flex;
     flex-direction: column;
 }
-
 /* Navbar Styling */
 /* Navbar styles */
 .navbar {
@@ -67,7 +66,7 @@ body {
 }
 
 .nav-links a:hover {
-    color: #45a049; /* Change color on hover */
+    color: #52c3f0; /* Change color on hover */
 }
 
 /* Call-to-action button */
