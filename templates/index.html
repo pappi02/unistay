@@ -12,40 +12,74 @@
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
         
-        
+        <style>
+
+
+
+        </style>
     </head>
 <body>
    
         <!-- Background Wrapper -->
-        <div class="background-wrapper">
+    <div class="background-wrapper">
             <!-- Navigation Bar -->
             <nav class="navbar">
-                <div class="navbar-brand">
-                    <a href="/">
-                        <img src="{% static 'image/logo.png' %}" alt="Unistay Logo" style="height: 60px;">
-                    </a>
+                <!-- Menu Icon for Mobile -->
+                <div class="menu-icon" onclick="toggleMenu()">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
                 </div>
-                <div class="nav-links">
+                <!-- Navigation Links -->
+                <div class="nav-links" id="navLinks">
                     <a href="{% url 'hostels_list' %}">Hostels</a>
                     <a href="{% url 'about' %}">About Us</a>
                     <a href="{% url 'contact' %}">Contact Us</a>
-                   
-                    <a href="{% url 'home' %}">Home</a>   
-                    <a href="{% url 'login' %}" class="cta-button">Login</a>
-                    
+                    <a href="{% url 'home' %}">Home</a>
                     
                 </div>
+                
+                <button id="profileButton" class="profile-icon">
+                    <img src="{% static 'image/default_avatar.jpg' %}" alt="Profile" style="width: 60px; height: 60px; border-radius: 50%;">
+                </button>
             </nav>
+        
+        
+        
+        <div id="profileSidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h2>Your Profile</h2>
+                <button id="closeSidebar" class="close-button">&times;</button>
+            </div>
+            <form method="POST" enctype="multipart/form-data" action="{% url 'update_profile' %}">
+                {% csrf_token %}
+                <div class="profile-picture">
+                    <label for="profileImage">Profile Picture:</label><br>
+                    <img src="{% static 'image/default_avatar.jpg' %}" alt="Profile" style="width: 100px; height: 100px; border-radius: 50%;">
+                </div>
+                <!-- Profile Details Section -->
+        <div class="profile-details">
+            <p><strong>Full Name:</strong> {{ studentprofile.full_name }}</p>
+            <p><strong>Admission Number:</strong> {{ studentprofile.admission_number }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Phone Number:</strong> {{ studentprofile.contact_number }}</p>
+        </div>
+                <a href="{% url 'update_profile' %}">Edit Profile</a>
+            </form>
+        </div>
+    
+        
+        
     
             <!-- Header Section -->
             <header class="main-header">
                 <div class="header-content">
                     <h1>Welcome to Unistay!</h1>
                     <p>Find your ideal off-campus hostel near Maseno University.</p>
-                    <a href="#" class="cta-button">Book Now</a>
+                    <a href="#" class="cta-button-list">List Your Property.</a>
                 </div>
             </header>
-        </div>
+    </div>
     
     
     
@@ -105,6 +139,33 @@
         </div>
     </footer>
     
+<script>
+function toggleMenu(icon) {
+    icon.classList.toggle("change");
+    const navLinks = document.querySelector(".nav-links");
+    navLinks.classList.toggle("show");
+}
+</script>
 
+<script>
+
+        document.getElementById('profileButton').addEventListener('click', function() {
+        document.getElementById('profileSidebar').style.right = '0';
+    });
+    
+    document.getElementById('closeSidebar').addEventListener('click', function() {
+        document.getElementById('profileSidebar').style.right = '-100%';
+    });
+    
+    // Preview image before upload
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            document.getElementById('profilePreview').src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+    </script>
+    
 </body>
 </html>

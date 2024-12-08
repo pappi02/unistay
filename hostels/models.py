@@ -59,7 +59,7 @@ class Booking(models.Model):
     # Personal Information
     full_name = models.CharField(max_length=50)
     admission_number = models.CharField(max_length=20)
-    phone_number = models.CharField(max_length=15)
+    contact_number = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField()
     semester = models.CharField(max_length=50)
 
@@ -176,19 +176,37 @@ class Booking(models.Model):
         verbose_name = "Booking"
         verbose_name_plural = "Bookings"
 
-# Optional: Student Profile model
+
+class StudentProfile(models.Model):
+    # Link to User model
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+    # Basic Information
+    full_name = models.CharField(max_length=50, blank=True, null=True)
+    admission_number = models.CharField(max_length=20, blank=True, null= True)
+    contact_number = models.CharField(max_length=15, blank=True, null=True)
+    
+    # Verification
+    verification_code = models.CharField(max_length=6, blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
+
 
 def generate_verification_code():
     """Generates a random 6-digit verification code."""
     return str(random.randint(100000, 999999))
 
-class StudentProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    contact_number = models.CharField(max_length=15, blank=True, null=True)
-    verification_code = models.CharField(max_length=6, blank=True, null=True)
-    is_verified = models.BooleanField(default=False)
 
-    def send_verification_email(self, request):
+
+
+
+def send_verification_email(self, request):
         """Send the verification email with the verification code."""
         verification_link = f"{request.scheme}://{request.get_host()}{reverse('verification')}?user_id={self.user.pk}&code={self.verification_code}"
         subject = 'Account Verification'
@@ -200,6 +218,10 @@ class StudentProfile(models.Model):
         })
         
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email])
+
+
+
+
 # Payment Method model
 class PaymentMethod(models.Model):
     PAYMENT_CHOICES = [

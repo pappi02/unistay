@@ -5,6 +5,26 @@ body, h2, p, form, input, button, a {
     box-sizing: border-box;
 }
 
+.alert {
+    padding: 15px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Optional: Make it disappear after a few seconds */
+.alert {
+    animation: fadeOut 5s forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+
 /* Body Styling */
 body {
     font-family: 'Arial', sans-serif; /* Replace with your site's font */

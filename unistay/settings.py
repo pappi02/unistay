@@ -18,7 +18,7 @@ SECRET_KEY = env('DJANGO_SECRET_KEY', default='your_default_secret_key')
 DEBUG = env.bool('DJANGO_DEBUG', default=False)
 
 # Allowed Hosts
-ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['localhost', '127.0.0.1', '0.0.0.0'])
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['localhost', '127.0.0.1', '0.0.0.0','192.168.1.106'])
 
 # Application definition
 INSTALLED_APPS = [
@@ -70,6 +70,16 @@ WSGI_APPLICATION = 'unistay.wsgi.application'
 DATABASES = {
     'default': env.db('DATABASE_URL', default='sqlite:///' + str(BASE_DIR / 'db.sqlite3')),
 }
+
+
+'''DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+'''
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import index, home_view, contact, login_view, register, about
+from .views import index, home_view, contact, login_view, register, about, update_profile
 from hostels import views
 
 urlpatterns = [
@@ -17,6 +17,7 @@ urlpatterns = [
     path('hostels/', views.hostels_list, name='hostels_list'),
     path('create_booking/<int:hostel_id>/', views.create_booking, name='create_booking'),
     path('verification/', views.verification, name='verification'),
+     path('update_profile/', update_profile, name='update_profile'), 
    
     
 ]
