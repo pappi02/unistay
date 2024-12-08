@@ -15,28 +15,53 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
-from django.utils.timezone import now
-from django.contrib.auth import get_user_model
 from .forms import CustomUserCreationForm
 from django.http import Http404
-from django.urls import reverse
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
+from .forms import StudentProfileForm
+from .models import StudentProfile
+
+
 
 
 
 
 def index(request):
-    # Fetch all hostels to display 
+    # Fetch all hostels to display
     hostels = Hostel.objects.all()
-    return render(request, 'index.html', {'hostels': hostels})
-
-
+    
+    # Check if the user is authenticated
+    if request.user.is_authenticated:
+        # Get the user's profile if it exists
+        try:
+            studentprofile = StudentProfile.objects.get(user=request.user)
+        except StudentProfile.DoesNotExist:
+            studentprofile = None  # If no profile exists, set it to None
+    else:
+        studentprofile = None  # If the user is not logged in, no profile data
+    
+    return render(request, 'index.html', {
+        'hostels': hostels,
+        'studentprofile': studentprofile  # Pass the profile to the template
+    })
 
 @login_required
 def home_view(request):
     hostels = Hostel.objects.all()
-    return render(request, 'home.html', {'hostels': hostels})  # Ensure you have a 'home.html' template
+
+    # Fetch the student profile of the logged-in user
+    try:
+        studentprofile = StudentProfile.objects.get(user=request.user)
+    except StudentProfile.DoesNotExist:
+        studentprofile = None  # Handle case where profile doesn't exist
+
+    # Pass both hostels and the student profile to the template
+    return render(request, 'home.html', {
+        'hostels': hostels,
+        'studentprofile': studentprofile,
+        'user': request.user,
+    })
 
 
 
@@ -108,6 +133,7 @@ def create_booking(request, hostel_id):
         else:
             # If the form is invalid, show error messages
             messages.error(request, 'Please correct the errors below.')
+            
     else:
         # For GET requests, initialize the form
         form = BookingForm()
@@ -265,7 +291,7 @@ def send_verification_email(user_email, verification_code, request):
         <div class="email-container">
             <!-- Header Section -->
             <div class="email-header">
-                <img src="http://127.0.0.1:8000/static/image/logo.png" alt="Site Logo">
+                <img src="http://0.0.0.0:8000/static/image/logo.png" alt="Site Logo">
                 <h1>Account Verification</h1>
             </div>
             <!-- Body Section -->
@@ -405,3 +431,20 @@ def hostel_details(request, hostel_id):
 
 
 
+
+@login_required
+def update_profile(request):
+    # Get the student's profile or create it if it doesn't exist
+    profile, created = StudentProfile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        form = StudentProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            # Add a success message
+            messages.success(request, 'Your profile has been updated successfully!')
+            return redirect('home')  # Redirect to the home page or profile page
+    else:
+        form = StudentProfileForm(instance=profile)
+
+    return render(request, 'update_profile.html', {'form': form, 'user_profile': profile})

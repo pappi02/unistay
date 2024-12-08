@@ -1,128 +1,121 @@
-/* General styles */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-    color: #343a40;
-}
-
-/* Container */
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
+    /* General styles */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        color: #343a40;
+    }
     
-}
+    /* Container */
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+    }
+    
+    /* Search Form */
+    /* General container styling */
+    form {
+        background-color: #ff7636; /* Light gray background */
+        padding: 20px;
+        
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        
+    }
+    
+    /* Styling for input and select fields */
+    .form-control, .form-select {
+        background-color: #fff;
+        border: 1px solid #2aaffc; /* Light border */
+        border-radius: 5px; /* Rounded edges */
+        padding: 10px 15px; /* Padding inside the fields */
+        font-size: 16px; /* Larger font size */
+        transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition for focus */
+        margin: 10px;
+        
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #007bff; /* Blue border on focus */
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Focus shadow effect */
+    }
+    
+    /* Button styling */
+    .btn {
+        background-color: #007bff; /* Blue background */
+        border: none;
+        border-radius: 5px;
+        padding: 12px 20px;
+        font-size: 18px;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s ease-in-out;
+    }
+    
+    .btn:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+        transform: scale(1.05); /* Slightly scale up on hover */
+    }
+    
+    .btn:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+    
+    /* Styling for the input field containers */
+    .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    /* Pagination */
+    .pagination {
+        margin: 20px 0;
+    }
+    
+    .pagination .page-item {
+        margin: 0 5px;
+    }
+    
+    .pagination .page-link {
+        color: #007bff;
+        text-decoration: none;
+    }
+    
+    .pagination .page-link:hover {
+        color: #0056b3;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+    
+    
+    .header {
+        font-size: 25px;
+        color: #007bff;
+        text-align: center;
+        padding: 30px;
+    }
+    
+    
+    
+        /* Responsive Design */
+    @media (max-width: 768px) {
+        .hostel-list {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+    
+       
+    }
 
-/* Search Form */
-form {
-    background-color: #ff7636; /* Light gray background */
-    padding: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    border-radius: 8px; /* Rounded corners */
-    margin-bottom: 20px; /* Spacing below the form */
-}
 
-/* Styling for input and select fields */
-.form-control, .form-select {
-    background-color: #fff;
-    border: 1px solid #2aaffc; /* Light border */
-    border-radius: 5px; /* Rounded edges */
-    padding: 10px 15px;
-    font-size: 16px;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    margin: 10px 0;
-}
-
-.form-control:focus, .form-select:focus {
-    border-color: #007bff; /* Blue border on focus */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Focus shadow effect */
-}
-
-/* Button styling */
-.btn {
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    padding: 12px 20px;
-    font-size: 18px;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s ease-in-out;
-}
-
-.btn:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-}
-
-.btn:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-/* Styling for the input field containers */
-.row {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-/* Hostels Section */
-.hostels {
-    margin: 20px 20px;
-}
-
-.hostel-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.hostel-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    text-align: center;
-}
-
-.hostel-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.hostel-card h3 {
-    margin: 10px 0;
-    font-size: 20px;
-    color: #007bff;
-}
-
-.hostel-card p {
-    margin: 5px 0;
-    color: #666;
-}
-
-.hostel-card .details-button {
-    display: inline-block;
-    margin: 10px 0;
-    padding: 10px 15px;
-    color: #fff;
-    background-color: #007bff;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-.hostel-card .details-button:hover {
-    background-color: #0056b3;
-}
-
-/* Footer */
-.footer {
+  /* Footer */
+  .footer {
     background-color: #343a40;
     color: #fff;
     padding: 40px 20px;
@@ -174,3 +167,18 @@ form {
     width: 30px;
     margin: 5px;
 }
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .footer-column {
+        margin: 5px 0;
+        row-gap: 0;
+    }
+}
+

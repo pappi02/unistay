@@ -1,4 +1,13 @@
 {% load static %}
+
+{% if messages %}
+    <div class="alert booking-success">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/create_booking.css' %}">
 
 {% block content %}

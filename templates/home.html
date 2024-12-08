@@ -1,5 +1,14 @@
 
 {% load static %}
+
+
+{% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12,43 +21,71 @@
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
         
-
         
     </head>
 <body>
    
-        <!-- Background Wrapper -->
-        <div class="background-wrapper">
-            <!-- Navigation Bar -->
-            <nav class="navbar">
-                <div class="navbar-brand">
-                    <a href="/">
-                        <img src="{% static 'image/logo.png' %}" alt="Unistay Logo" style="height: 60px;">
-                    </a>
-                </div>
-                <div class="nav-links">
-                    <a href="{% url 'hostels_list' %}">Hostels</a>
-                    <a href="{% url 'about' %}">About Us</a>
-                    <a href="{% url 'contact' %}">Contact Us</a>
-                    {% if user.is_authenticated %}
-                    <a href="{% url 'home' %}">Home</a>
-                    {% else %}
-                    <a href="{% url 'login' %}" class="cta-button">Login</a>
-                    <a href="{% url 'register' %}" class="cta-button">Sign Up</a>
-                    {% endif %}
-                </div>
-            </nav>
+           <!-- Background Wrapper -->
+    <div class="background-wrapper">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <!-- Menu Icon for Mobile -->
+            <div class="menu-icon" onclick="toggleMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <!-- Navigation Links -->
+            <div class="nav-links" id="navLinks">
+                <a href="{% url 'hostels_list' %}">Hostels</a>
+                <a href="{% url 'about' %}">About Us</a>
+                <a href="{% url 'contact' %}">Contact Us</a>
+                
+                
+            </div>
+            
+            <button id="profileButton" class="profile-icon">
+                <img src="{% static 'image/default_avatar.jpg' %}" alt="Profile" style="width: 60px; height: 60px; border-radius: 50%;">
+            </button>
+        </nav>
     
-            <!-- Header Section -->
-            <header class="main-header">
-                <div class="header-content">
-                    <h1>Welcome to Unistay!</h1>
-                    <p>Find your ideal off-campus hostel near Maseno University.</p>
-                    <a href="#" class="cta-button">Book Now</a>
-                </div>
-            </header>
+    
+    
+    <div id="profileSidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Your Profile</h2>
+            <button id="closeSidebar" class="close-button">&times;</button>
         </div>
+        <form method="POST" enctype="multipart/form-data" action="{% url 'update_profile' %}">
+            {% csrf_token %}
+            <div class="profile-picture">
+                <label for="profileImage"></label><br>
+                <img src="{% static 'image/default_avatar.jpg' %}" alt="Profile" style="width: 100px; height: 100px; border-radius: 50%;">
+               
+            </div>
+            <div class="profile-details">
+                <p><strong>Full Name:</strong> {{ studentprofile.full_name }}</p>
+                <p><strong>Admission Number:</strong> {{ studentprofile.admission_number }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Phone Number:</strong> {{ studentprofile.contact_number }}</p>
+            </div>
+            <a href="{% url 'update_profile' %}">Edit Profile</a>
+        </form>
+    </div>
+
     
+    
+
+        <!-- Header Section -->
+        <header class="main-header">
+            <div class="header-content">
+                <h1>Welcome to Unistay!</h1>
+                <p>Find your ideal off-campus hostel near Maseno University.</p>
+                <a href="#" class="cta-button-list">List Your Property.</a>
+            </div>
+        </header>
+</div>
+
     
     
     
@@ -72,40 +109,69 @@
         </div>
     </section>
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-column">
-                <h3>About Us</h3>
-                <p>Your one-stop hostel booking platform providing quality accommodation for students and visitors.</p>
-            </div>
-            <div class="footer-column">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'hostels_list' %}">Hostels</a></li>
-                    <li><a href="{% url 'about' %}">About</a></li>
-                    <li><a href="{% url 'contact' %}">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>Contact Us</h3>
-                <p>Email: support@unistay.com</p>
-                <p>Phone: +254 123 456 789</p>
-            </div>
-            <div class="footer-column">
-                <h3>Follow Us</h3>
-                <div class="social-icons">
-                    <a href="https://www.facebook.com/daveey.debaraka.3?mibextid=LQQJ4d"><img src="static/image/Facebook.webp" alt="Facebook"></a>
-                    <a href="https://x.com/am_nyongesa"><img src="static/image/twitter.jpeg" alt="Twitter"></a>
-                    <a href="https://www.instagram.com/little_nyongesa"><img src="static/image/instagram.png" alt="Instagram"></a>
-                    <a href="https://www.linkedin.com/in/pappi-chulo-947552270?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"><img src="static/image/linkedin.jpeg" alt="LinkedIn"></a>
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>About Us</h3>
+                    <p>Your one-stop hostel booking platform providing quality accommodation for students and visitors.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'hostels_list' %}">Hostels</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <p>Email: support@unistay.com</p>
+                    <p>Phone: +254 123 456 789</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/daveey.debaraka.3?mibextid=LQQJ4d"><img src="{% static 'image/Facebook.webp' %}"alt="Facebook"></a>
+                        <a href="https://x.com/am_nyongesa"><img src="{% static 'image/twitter.jpeg' %}"alt="Twitter"></a>
+                        <a href="https://www.instagram.com/little_nyongesa"><img src="{% static 'image/instagram.png' %}" alt="Instagram"></a>
+                        <a href="https://www.linkedin.com/in/pappi-chulo-947552270?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"><img src="{% static 'image/linkedin.jpeg' %}" alt="LinkedIn"></a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Unistay. All rights reserved.</p>
-        </div>
-    </footer>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Unistay. All rights reserved.</p>
+            </div>
+        </footer>
+        
+    <script>
+    function toggleMenu(icon) {
+        icon.classList.toggle("change");
+        const navLinks = document.querySelector(".nav-links");
+        navLinks.classList.toggle("show");
+    }
+    </script>
+    
+    <script>
+    
+            document.getElementById('profileButton').addEventListener('click', function() {
+            document.getElementById('profileSidebar').style.right = '0';
+        });
+        
+        document.getElementById('closeSidebar').addEventListener('click', function() {
+            document.getElementById('profileSidebar').style.right = '-100%';
+        });
+        
+        // Preview image before upload
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById('profilePreview').src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+        </script>
     
 
 </body>

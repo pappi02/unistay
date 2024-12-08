@@ -2,6 +2,7 @@ from django import forms
 from hostels.models import Booking
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import StudentProfile
 
 
 class BookingForm(forms.ModelForm):
@@ -14,14 +15,14 @@ class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
         fields = [
-            'full_name', 'admission_number', 'phone_number', 'email', 'semester',
+            'full_name', 'admission_number', 'contact_number', 'email', 'semester',
             'emergency_name', 'emergency_phone', 'emergency_relationship',
             'room_type', 'transaction_message'
         ]
         widgets = {
             'full_name': forms.TextInput(attrs={'class': 'form-control'}),
             'admission_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'contact_number': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'semester': forms.TextInput(attrs={'class': 'form-control'}),
             'emergency_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -50,3 +51,9 @@ class CustomUserCreationForm(UserCreationForm):
 
     class VerificationCodeForm(forms.Form):
          verification_code = forms.CharField(max_length=6, label="Verification Code")
+
+
+class StudentProfileForm(forms.ModelForm):
+    class Meta:
+        model = StudentProfile
+        fields = ['full_name', 'admission_number','contact_number']

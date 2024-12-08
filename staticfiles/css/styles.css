@@ -9,6 +9,19 @@ body {
     color: #333;
 }
 
+.alert {
+    padding: 15px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Optional: Make it disappear after a few seconds */
+.alert {
+    animation: fadeOut 5s forwards;
+}
 
 
 
@@ -21,41 +34,237 @@ body {
 }
 /* Navbar Styling */
 /* Navbar styles */
+
+
 .navbar {
     display: flex;
     justify-content: space-between; /* Logo on one side, links on the other */
     align-items: center; /* Vertically align items */
     padding: 1rem 2rem;
-    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent background */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     color: #fff;
     position: sticky;
     top: 0;
     z-index: 1000;
-}
+    height: 15vh;
 
-/* Logo styles */
-.navbar-brand {
-    flex: 1; /* Occupies one column */
-}
-
-.navbar-brand .logo {
-    height: 200px; /* Increased logo size */
-    width: auto; /* Maintain aspect ratio */
-    transition: transform 0.3s; /* Add smooth scaling on hover */
-}
-
-.navbar-brand .logo:hover {
-    transform: scale(1.1); /* Slightly enlarge on hover */
 }
 
 /* Navigation links */
 .nav-links {
     flex: 2; /* Occupies the second column */
     display: flex;
-    justify-content: flex-end; /* Align links to the right */
+    justify-content: flex-start; /* Align links to the right */
     gap: 1.5rem; /* Spacing between links */
+    bottom: 10px;
+    
 }
+
+
+/* Profile Icon */
+.profile-icon img {
+    border-radius: 50%;
+    cursor: pointer;
+}
+          
+
+/* Menu Icon Styling */
+.menu-icon {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 35px;
+    height: 25px;
+    cursor: pointer;
+    z-index: 1001; /* Ensures it appears above nav-links */
+}
+
+.menu-icon div {
+    width: 100%;
+    height: 4px;
+    background-color: #fff;
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+/* Transformations for Menu Icon Animation */
+.menu-icon.change .bar1 {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.menu-icon.change .bar2 {
+    opacity: 0;
+}
+
+.menu-icon.change .bar3 {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Display Menu Icon on Small Screens */
+@media (max-width: 768px) {
+    .menu-icon {
+        display: flex;
+        right: auto; /* Visible only on small screens */
+        margin: 10px;
+
+    }
+    .nav-links {
+        display: none; /* Hidden by default for dropdown */
+        flex-direction: column; /* Stack links vertically */
+        width: 100%; /* Full-width dropdown */
+        background-color: rgba(0, 0, 0, 0.9); /* Dropdown background */
+        position: absolute;
+        top: 75;
+        right: 0;
+        padding: 1.5rem 1rem;
+        
+        z-index: 999;
+    }
+    .nav-links.show {
+        display: flex; /* Show dropdown when toggled */
+        width: 100%;
+    }
+}
+
+/* General Styling for Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Initially off-screen */
+    width: 300px;
+    height: 100%;
+    background-color: #ffffff;
+    box-shadow: -4px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    overflow-y: auto;
+    transition: right 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.sidebar-header h2 {
+    font-size: 1.8rem;
+    color: #333;
+    font-weight: 700;
+}
+
+.close-button {
+    font-size: 2rem;
+    color: #aaa;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: #4a90e2; /* Color change on hover */
+}
+
+/* Profile Picture Section */
+.profile-picture {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #4a90e2; /* Unistay blue border */
+    margin-bottom: 10px;
+}
+
+.profile-picture input[type="file"] {
+    margin-top: 10px;
+    font-size: 1rem;
+    background-color: #f7f7f7;
+    border: 2px solid #4ab4df;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 90%;
+}
+
+.profile-picture input[type="file"]:hover {
+    background-color: #e7f3fe; /* Hover effect */
+}
+
+/* Profile Details */
+.profile-details {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.profile-details p {
+    margin-bottom: 10px;
+}
+
+.profile-details strong {
+    color: #4a90e2; /* Highlight key labels */
+}
+
+
+
+/* Show Sidebar When Active */
+.sidebar.active {
+    right: 0; /* Slide in from right */
+}
+
+/* Responsive Design for Small Screens */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 250px; /* Slightly smaller width for mobile screens */
+    }
+
+    .sidebar-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .profile-picture img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+
+/* General Styling for Profile Button */
+.profile-icon {
+    position: fixed; /* Fixed to screen position */ /* Distance from the right side of the screen */
+    background-color: url('/static/image/default_avatar.jpg') no-repeat center center/cover;
+    border: none;
+    padding: 0;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+    transition: all 0.3s ease;
+    z-index: 1000; /* Ensure it's on top of other elements */
+    margin: 20px;
+    right: 15px;
+}
+
+
+
+/* Responsive Design for Small Screens */
+@media (max-width: 768px) {
+    .profile-icon {
+        bottom: 10px; /* Adjust the distance from the bottom */
+        right: 10px;  /* Adjust the distance from the right */
+    }
+}
+
+
+
 
 .nav-links a {
     color: #fff;
@@ -70,7 +279,7 @@ body {
 }
 
 /* Call-to-action button */
-.navbar .cta-button {
+.navbar .cta-button-list {
     background: #1656d7;
     color: white;
     padding: 0.5rem 1.2rem;
@@ -80,24 +289,14 @@ body {
     transition: background-color 0.3s;
 }
 
-.navbar .cta-button:hover {
-    background: #45a049; /* Green shade on hover */
+.navbar .cta-button-list:hover {
+    background: #51a0eb; /* Green shade on hover */
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column; /* Stack logo and links */
-        align-items: flex-start; /* Align items to the left */
-    }
-    .nav-links {
-        justify-content: flex-start; /* Align links to the left */
-        gap: 1rem; /* Reduce gap for smaller screens */
-    }
-    .navbar-brand .logo {
-        height: 100px; /* Slightly smaller logo for mobile */
-    }
-}
+
+
+
+
 
 
 /* Header Section */
@@ -127,7 +326,7 @@ body {
 
 
 /* "Book Now" Button Styling */
-.main-header .header-content .cta-button  {
+.main-header .header-content .cta-button-list  {
     display: inline-block;
     padding: 12px 25px;
     font-size: 1em;
@@ -138,7 +337,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.main-header .header-content .cta-button  {
+.main-header .header-content .cta-button-list  {
     background-color: #0056b3;
 }
 
@@ -267,13 +466,14 @@ body {
     }
     
     .footer-column {
-        margin: 10px 0;
+        margin: 5px 0;
+        row-gap: 0;
     }
 }
 
 
 /* Responsive Design */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
     .navbar {
         flex-direction: column;
         align-items: flex-start;
@@ -289,11 +489,13 @@ body {
     }
 
     .hostel-list {
-        flex-direction: column;
+        display: grid; /* Use grid layout for better control */
+        grid-template-columns: repeat(2, 1fr); /* Two columns per row */
+        gap: 15px; /* Adjust spacing between cards */
     }
 
     .hostel-card {
-        width: 90%;
+        width: 100%;
     }
 }
 
@@ -302,19 +504,14 @@ body {
         padding: 10px;
     }
 
-    .hostel-card img {
-        height: 150px;
-    }
-
+    
     .contact-page {
         padding: 15px;
     }
 }
 
 @media screen and (max-width: 480px) {
-    .navbar-brand {
-        font-size: 20px;
-    }
+    
 
     .main-header {
         height: 200px;
@@ -329,7 +526,7 @@ body {
     }
 
     .footer {
-        font-size: 12px;
+        font-size: 14px;
     }
 }
 

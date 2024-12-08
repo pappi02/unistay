@@ -53,7 +53,7 @@ class BookingAdmin(admin.ModelAdmin):
         'admission_number',
         'hostel',
         'room_type',
-        'phone_number',
+        'contact_number',
         'email', 
         'created_at',
         'truncated_transaction',
@@ -65,7 +65,7 @@ class BookingAdmin(admin.ModelAdmin):
         'full_name',
         'admission_number',
         'email',
-        'phone_number',
+        'contact_number',
         'hostel__name',
         'emergency_name',
     )
@@ -82,7 +82,7 @@ class BookingAdmin(admin.ModelAdmin):
             'fields': (
                 'full_name',
                 'admission_number',
-                'phone_number',
+                'contact_number',
                 'email',
                 'semester',
             ),
