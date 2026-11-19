@@ -31,3 +31,14 @@ build/
 
 # Windows system files
 Thumbs.db
+
+# Secrets, local data and environments
+.env
+*.env
+!.env.example
+db.sqlite3
+__pycache__/
+*.pyc
+unis/
+venv/
+.venv/
